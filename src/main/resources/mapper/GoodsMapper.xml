@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="com.liqiong.mapper.GoodsMapper">
+    	<!-- 查询所有商品信息 -->
+    	<select id="queryGoodsAll" resultType="com.liqiong.beans.Goods" parameterType="map">
+    	SELECT * FROM tgoods g LEFT JOIN tbrand b ON g.bid = b.bid
+    	<where>
+    		<if test="bid!=null">
+    		g.bid=#{bid}
+    		</if>
+    		<if test="stauts!=null">
+    		 AND stauts=#{stauts}
+    		</if>
+    		<if test="startPrice!=null and startPrice!=''">
+    		AND tprice>=#{startPrice}
+    		</if>
+    		<if test="endPrice!=null and endPrice!=''">
+    		AND tprice &lt;=#{endPrice}
+    		</if> 
+    	</where>
+    	</select>
+    	<!-- 查询所有品牌信息 -->
+    	<select id="queryBrandAll" resultType="com.liqiong.beans.Goods">
+    	SELECT * FROM tbrand 
+    	</select>
+    	<!-- 添加商品 -->
+    	<insert id="addGoods" parameterType="com.liqiong.beans.Goods">
+    		INSERT INTO tgoods(tname,bid,tprice,stauts) VALUES(#{tname},#{bid},#{tprice},#{stauts})
+    	</insert>
+    	<!-- 根据id查询商品 -->
+    	<select id="queryGoodsById" resultType="com.liqiong.beans.Goods">
+    	SELECT * FROM tgoods WHERE tid=#{tid}
+    	</select>
+    	<!-- 修改商品 -->
+    	<update id="updateGoods" parameterType="com.liqiong.beans.Goods">
+    	UPDATE tgoods 
+		<set>
+			<if test="tname!=null and tname!=''">
+			tname=#{tname},
+			</if>
+			<if test="tprice!=null and tprice!=''">
+			tprice=#{tprice},
+			</if>
+			<if test="bid!=null">
+			bid=#{bid},
+			</if>
+			<if test="stauts!=null">
+			stauts=#{stauts}
+			</if>
+		</set>
+ 		 WHERE tid=#{tid}
+    	</update>
+    </mapper>
